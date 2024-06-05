@@ -201,7 +201,6 @@ func getBooks(client *mongo.Client) http.HandlerFunc {
 }
 
 func main() {
-	// Replace with your MongoDB Atlas connection string
 	clientOptions := options.Client().ApplyURI("mongodb+srv://Esimgali:kuxeP8FmpY80Sj9g@cluster0.7lkmz1b.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 	//mongodb+srv://Esimgali:<password>@cluster0.7lkmz1b.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 	client, err := mongo.Connect(context.Background(), clientOptions)

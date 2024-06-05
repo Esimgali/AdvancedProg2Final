@@ -1,4 +1,3 @@
-// email_auth_service.go
 package main
 
 import (

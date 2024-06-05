@@ -1,4 +1,3 @@
-// book_log_service.go
 package main
 
 import (

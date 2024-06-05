@@ -1,4 +1,3 @@
-// text_email_service.go
 package main
 
 import (
