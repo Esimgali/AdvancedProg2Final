@@ -48,7 +48,7 @@ func getLogs(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	var err error
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	clientOptions := options.Client().ApplyURI("mongodb+srv://Esimgali:kuxeP8FmpY80Sj9g@cluster0.7lkmz1b.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 	client, err = mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
 		fmt.Println(err)

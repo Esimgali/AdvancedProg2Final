@@ -20,19 +20,17 @@ func sendAuthCode(w http.ResponseWriter, r *http.Request) {
 	email := r.URL.Query().Get("email")
 	code := r.URL.Query().Get("code")
 
-	from := "your-email@example.com"
-	password := "your-email-password"
+	from := "esimgalikhamitov2005@gmail.com"
+	password := "oauc fsxn vnxd paxx"
+	SMTPHost := "smtp.gmail.com"
+	port := 587
+	msg := fmt.Sprintf("From: %s\nTo: %s\nSubject: Verification Code\n\nYour verification code is: %s", from, email, code)
 
-	to := []string{email}
-	smtpHost := "smtp.example.com"
-	smtpPort := "587"
+	auth := smtp.PlainAuth("", from, password, SMTPHost)
 
-	message := []byte("Subject: Authentication Code\r\n\r\n" + "Your authentication code is: " + code)
-
-	auth := smtp.PlainAuth("", from, password, smtpHost)
-	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, to, message)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	errLast := smtp.SendMail(fmt.Sprintf("%s:%d", SMTPHost, port), auth, from, []string{email}, []byte(msg))
+	if errLast != nil {
+		http.Error(w, errLast.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -41,7 +39,7 @@ func sendAuthCode(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	var err error
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	clientOptions := options.Client().ApplyURI("mongodb+srv://Esimgali:kuxeP8FmpY80Sj9g@cluster0.7lkmz1b.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 	client, err = mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
 		fmt.Println(err)

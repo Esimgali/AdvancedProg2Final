@@ -5,12 +5,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"net/smtp"
 	"os"
 
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"gopkg.in/gomail.v2"
 )
 
 var client *mongo.Client
@@ -33,20 +33,15 @@ func sendTextAsEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	from := "your-email@example.com"
-	password := "your-email-password"
-
-	to := []string{email}
-	smtpHost := "smtp.example.com"
-	smtpPort := "587"
-
-	message := []byte("Subject: Your Text File\r\n\r\n" + "Please find the attached text file.")
-
-	auth := smtp.PlainAuth("", from, password, smtpHost)
-	err = smtp.SendMail(smtpHost+":"+smtpPort, auth, from, to, message)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	m := gomail.NewMessage()
+	m.SetHeader("From", "esimgalikhamitov2005@gmail.com")
+	m.SetHeader("To", string(email))
+	m.SetHeader("Subject", "Hello!")
+	m.SetBody("text/plain", "This is the plain text body of the email.")
+	m.Attach("./file.txt")
+	d := gomail.NewDialer("smtp.gmail.com", 587, "esimgalikhamitov2005@gmail.com", "ydbq okrv hvpq tcqc")
+	if err := d.DialAndSend(m); err != nil {
+		panic(err)
 	}
 
 	fmt.Fprint(w, "Email Sent Successfully!")
@@ -54,7 +49,7 @@ func sendTextAsEmail(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	var err error
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	clientOptions := options.Client().ApplyURI("mongodb+srv://Esimgali:kuxeP8FmpY80Sj9g@cluster0.7lkmz1b.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 	client, err = mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
 		fmt.Println(err)
