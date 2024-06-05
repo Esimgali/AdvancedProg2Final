@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -17,7 +19,6 @@ var client *mongo.Client
 func sendTextAsEmail(w http.ResponseWriter, r *http.Request) {
 	email := r.URL.Query().Get("email")
 	text := r.URL.Query().Get("text")
-
 	fileName := "file.txt"
 	file, err := os.Create(fileName)
 	if err != nil {
@@ -26,7 +27,7 @@ func sendTextAsEmail(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	_, err = file.WriteString(text)
+	_, err = io.Copy(file, strings.NewReader(text))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -43,7 +44,7 @@ func sendTextAsEmail(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	fmt.Fprint(w, "Email Sent Successfully!")
+	fmt.Fprint(w, "Email Sent Successfully!", text)
 }
 
 func main() {
