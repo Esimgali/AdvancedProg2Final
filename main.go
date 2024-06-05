@@ -170,6 +170,7 @@ func toEmail(client *mongo.Client) http.HandlerFunc {
 		var books string
 		fmt.Fscan(resp.Body, &books)
 
+		fmt.Println(books)
 		resp, err = http.Get(fmt.Sprintf("http://localhost:8083/sendTextAsEmail?email=%s&text=%s", user["mail"], books))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
